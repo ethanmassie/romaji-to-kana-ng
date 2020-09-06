@@ -80,7 +80,7 @@ export class RomajiToKanaPipe implements PipeTransform {
         result += mappedValue;
         acc = '';
       } else if (acc.length == 3) {
-        // loggic for a double consonant
+        // logic for a double consonant
         // check if the top is equal to the next char
         if (acc[0] == acc[1]) {
           const mappedTail = kanaMap[acc.slice(1)];

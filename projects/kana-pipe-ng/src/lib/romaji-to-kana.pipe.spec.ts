@@ -21,6 +21,7 @@ describe('RomajiToKanaPipe', () => {
 
   it('shouldn\'t map invalid characters', () => {
     expect(pipe.transform('ts > js')).toEqual('ts > js');
+    expect(pipe.transform('bbb')).toEqual('bbb');
   });
 
   it('should work as inputs are made', () => {
