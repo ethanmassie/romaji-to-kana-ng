@@ -22,6 +22,8 @@ const kanaMap = {
   'rya': 'りゃ', 'ryu': 'りゅ', 'ryo': 'りょ',
 }
 
+const kanaRegExp = /[\u3040-\u30ff]/g;
+
 @Pipe({
   name: 'romajiToKana'
 })
@@ -32,9 +34,16 @@ export class RomajiToKanaPipe implements PipeTransform {
     let valueArr = value.toLowerCase().split('')
     let result = '';
     while (valueArr.length) {
-      acc = acc.concat(valueArr.shift());      
-      const mappedValue = kanaMap[acc];
+      acc = acc.concat(valueArr.shift());
+      
+      // if the acc contains a kana character reset acc and continue
+      if (acc.match(kanaRegExp)) {
+        result += acc;
+        acc = '';
+        continue;
+      }
 
+      const mappedValue = kanaMap[acc];
       if (!!mappedValue) {
         result += mappedValue;
         acc = '';
@@ -49,14 +58,14 @@ export class RomajiToKanaPipe implements PipeTransform {
             continue;
           } else {
             // peek at the next character
-            const nextChar = valueArr.slice(0, 1);
+            const nextChar = valueArr.slice(0, 1); // using a slice since we don't know if there actually is another character
             const fourCharMatch = kanaMap[acc.slice(1).concat(...nextChar)];
 
             // we found something like jjya or ggya
             if (!!fourCharMatch) {
               result += `っ${fourCharMatch}`;
               acc = '';
-              valueArr.shift();
+              valueArr.shift(); // remove the character we peeked at
               continue;
             }
           }

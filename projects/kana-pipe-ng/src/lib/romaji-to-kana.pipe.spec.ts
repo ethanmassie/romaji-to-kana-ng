@@ -22,4 +22,12 @@ describe('RomajiToKanaPipe', () => {
   it('shouldn\'t map invalid characters', () => {
     expect(pipe.transform('ts > js')).toEqual('ts > js');
   });
+
+  it('should work as inputs are made', () => {
+    let value = 'ka';
+    value = pipe.transform(value);
+    value = pipe.transform(value.concat('ka'));
+    value = pipe.transform(value.concat('a'));
+    expect(value).toEqual('かかあ');
+  })
 });
