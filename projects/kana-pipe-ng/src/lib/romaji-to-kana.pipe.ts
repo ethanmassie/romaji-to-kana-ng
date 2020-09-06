@@ -30,6 +30,8 @@ const kanaRegExp = /[\u3040-\u30ff]/g;
 export class RomajiToKanaPipe implements PipeTransform {
 
   transform(value: string, ...args: string[]): string {
+    if (!value) return;
+
     let acc = '';
     let valueArr = value.toLowerCase().split('')
     let result = '';
