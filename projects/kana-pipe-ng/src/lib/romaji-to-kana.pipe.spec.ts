@@ -1,24 +1,25 @@
 import { RomajiToKanaPipe } from './romaji-to-kana.pipe';
 
-const testStrings = {
-  'konnnichiha': 'こんにちは',
-  'aeiou': 'あえいおう',
-  'kka': 'っか',
-  'ggya': 'っぎゃ'
-}
-
 describe('RomajiToKanaPipe', () => {
-  it('create an instance', () => {
-    const pipe = new RomajiToKanaPipe();
+  const pipe = new RomajiToKanaPipe();
+  it('should create an instance', () => {
     expect(pipe).toBeTruthy();
   });
 
-  it('should map test strings correctly', () => {
-    const pipe = new RomajiToKanaPipe();
-    for (let romaji of Object.keys(testStrings)) {
-      const transform = pipe.transform(romaji)
-      console.log(`${romaji} -> ${transform}`);
-      expect(transform).toEqual(testStrings[romaji]);
-    }
-  })
+  it('should map konnnichiha to こんにちは', () => {
+    expect(pipe.transform('konnnichiha')).toEqual('こんにちは');
+  });
+
+  it('should map aeiou to あえいおう', () => {
+    expect(pipe.transform('aeiou')).toEqual('あえいおう');
+  });
+
+  it('should map double consonants', () => {
+    expect(pipe.transform('kka')).toEqual('っか');
+    expect(pipe.transform('ggya')).toEqual('っぎゃ');
+  });
+
+  it('shouldn\'t map invalid characters', () => {
+    expect(pipe.transform('ts > js')).toEqual('ts > js');
+  });
 });
