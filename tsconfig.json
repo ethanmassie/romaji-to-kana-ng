@@ -6,5 +6,12 @@
 */
 {
   "files": [],
-  "references": []
+  "references": [
+    {
+      "path": "./projects/kana-pipe-ng/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/kana-pipe-ng/tsconfig.spec.json"
+    }
+]
 }
