@@ -8,10 +8,10 @@
   "files": [],
   "references": [
     {
-      "path": "./projects/kana-pipe-ng/tsconfig.lib.json"
+      "path": "./projects/romaji-to-kana-ng/tsconfig.lib.json"
     },
     {
-      "path": "./projects/kana-pipe-ng/tsconfig.spec.json"
+      "path": "./projects/romaji-to-kana-ng/tsconfig.spec.json"
     }
 ]
 }
