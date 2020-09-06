@@ -20,9 +20,33 @@ const kanaMap = {
   'mya': 'みゃ', 'myu': 'みゅ', 'myo': 'みょ',
   'pya': 'ぴゃ', 'pyu': 'ぴゅ', 'pyo': 'ぴょ',
   'rya': 'りゃ', 'ryu': 'りゅ', 'ryo': 'りょ',
+
+  // standard katakana
+  'NN': 'ｎ', 'WA': 'ワ', 'RA': 'ラ', 'YA': 'ヤ', 'MA': 'マ', 'BA': 'バ', 'HA': 'ハ', 'NA': 'ナ', 'DA': 'ダ', 'TA':  'タ', 'ZA': 'ザ', 'SA':  'サ', 'GA': 'ガ', 'KA': 'カ', 'A': 'ア',
+                          'RI': 'リ',           　'MI': 'ミ', 'BI': 'ビ', 'HI': 'ヒ', 'NI': 'ニ', 'DI': 'ヂ', 'CHI': 'チ', 'JI': 'ジ', 'SHI': 'シ', 'GI': 'ギ', 'KI': 'キ', 'I': 'イ',
+                          'RU': 'ル', 'YU': 'ユ', 'MU': 'ム', 'BU': 'ブ', 'FU': 'フ', 'NU': 'ヌ', 'DU': 'ヅ', 'TSU': 'ツ', 'ZU': 'ズ', 'SU':  'ス', 'GU': 'グ', 'KU': 'ク', 'U': 'ウ',
+                          'RE': 'レ',           　'ME': 'メ', 'BE': 'ベ', 'HE': 'ヘ', 'NE': 'ネ', 'DE': 'デ', 'TE':  'テ', 'ZE': 'ゼ', 'SE':  'セ', 'GE': 'ゲ', 'KE': 'ケ', 'E': 'エ',
+              'WO': 'ヲ', 'RO': 'ロ', 'YO': 'ヨ', 'MO': 'モ', 'BO': 'ボ', 'HO': 'ホ', 'NO': 'ノ', 'DO': 'ド', 'TO':  'ト', 'ZO': 'ゾ', 'SO':  'ソ', 'GO': 'ゴ', 'KO': 'コ', 'O': 'オ',
+
+  // little ya yu and yo katakana
+  'KYA': 'キャ', 'KYU': 'キュ', 'KYO': 'キョ',
+  'GYA': 'ギャ', 'GYU': 'ギュ', 'GYO': 'ギョ',
+  'SYA': 'シャ', 'SYU': 'シュ', 'SYO': 'ショ',
+  'JYA': 'ジャ', 'JYU': 'ジュ', 'JYO': 'ジョ',
+  'CYA': 'チャ', 'CYU': 'チュ', 'CYO': 'チョ',
+  'NYA': 'ニャ', 'NYU': 'ニュ', 'NYO': 'ニョ',
+  'HYA': 'ヒャ', 'HYU': 'ヒュ', 'HYO': 'ヒョ',
+  'BYA': 'ビャ', 'BYU': 'ビュ', 'BYO': 'ビョ',
+  'MYA': 'ミャ', 'MYU': 'ミュ', 'MYO': 'ミョ',
+  'PYA': 'ピャ', 'PYU': 'ピュ', 'PYO': 'ピョ',
+  'RYA': 'リャ', 'RYU': 'リュ', 'RYO': 'リョ',
+
+  // others
+  '-': 'ー' // long vowel
 }
 
-const kanaRegExp = /[\u3040-\u30ff]/g;
+const katakanaRegExp =/[\u30a0-\u30ff]/g; // matches only katakana characters
+const specialCharAndKanaRegExp = /[!@#$%^&*(),.?":{}|<>\ _\u3040-\u30ff]/g; // matches kana and special characters
 
 @Pipe({
   name: 'romajiToKana'
@@ -33,16 +57,22 @@ export class RomajiToKanaPipe implements PipeTransform {
     if (!value) return;
 
     let acc = '';
-    let valueArr = value.toLowerCase().split('')
+    let valueArr = value.split('')
     let result = '';
     while (valueArr.length) {
       acc = acc.concat(valueArr.shift());
       
-      // if the acc contains a kana character reset acc and continue
-      if (acc.match(kanaRegExp)) {
+      // if the acc contains a kana character or a special character reset acc and continue
+      if (acc.match(specialCharAndKanaRegExp)) {
         result += acc;
         acc = '';
         continue;
+      }
+
+      // check if there is mixed casing
+      if (acc.match(/[a-z]/g) && acc.match(/[A-Z]/g)) {
+        result += acc[0];
+        acc = acc.slice(1);
       }
 
       const mappedValue = kanaMap[acc];
@@ -55,7 +85,7 @@ export class RomajiToKanaPipe implements PipeTransform {
         if (acc[0] == acc[1]) {
           const mappedTail = kanaMap[acc.slice(1)];
           if (!!mappedTail) {
-            result += `っ${mappedTail}`;
+            result += this.makeDoubleConsonant(mappedTail);
             acc = '';
             continue;
           } else {
@@ -65,7 +95,7 @@ export class RomajiToKanaPipe implements PipeTransform {
 
             // we found something like jjya or ggya
             if (!!fourCharMatch) {
-              result += `っ${fourCharMatch}`;
+              result += this.makeDoubleConsonant(fourCharMatch);
               acc = '';
               valueArr.shift(); // remove the character we peeked at
               continue;
@@ -82,4 +112,8 @@ export class RomajiToKanaPipe implements PipeTransform {
     return result.concat(acc);
   }
 
+  makeDoubleConsonant(kana: string) {
+    // choose which little tsu to use based on if it is katakana
+    return kana.match(katakanaRegExp) ? `ッ${kana}`: `っ${kana}`;
+  }
 }

@@ -29,5 +29,21 @@ describe('RomajiToKanaPipe', () => {
     value = pipe.transform(value.concat('ka'));
     value = pipe.transform(value.concat('a'));
     expect(value).toEqual('かかあ');
+  });
+
+  it('should work with katakana', () => {
+    expect(pipe.transform('KATAKANAHAKAKKOII')).toEqual('カタカナハカッコイイ');
+  });
+
+  it('shouldn\'t work with mixed case', () => {
+    expect(pipe.transform('KaTaKaNa')).toEqual('KあTあKあNあ');
+  });
+
+  it('should work with special characters', () => {
+    expect(pipe.transform('yoroshikuonegaishimasu! (^-^)')).toEqual('よろしくおねがいします! (^ー^)');
+  });
+
+  it('should replace - with a long vowel', () => {
+    expect(pipe.transform('a-iggyo-')).toEqual('あーいっぎょー');
   })
 });
