@@ -1,27 +1,26 @@
-# KanaPipe
+# RomajiToKanaNg
+Provides an angular pipe for converting roman characters to kana.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.4.
+# Developer Usage
 
-## Development server
+Import the module
+```typescript
+import { RomajiToKanaModule } from 'romaji-to-kana';
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+@ngModule(
+    ...
+    imports: [
+        ...
+        RomajiToKanaModule
+    ]
+)
+```
 
-## Code scaffolding
+Usage with ngModel
+```html
+<input [ngModel]="value | romajiToKana" (ngModelChange)="value=$event" type="text"/>
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+# Enduser Usage
+Input your romaji phonetically. Capitals will be converted to katakana whereas lowercase is converted to hiragana.  Mixed case will be ignored.
+'-' hyphens will be converted to katakana long vowels. Example: ka -> か　gyo -> ぎょ　gga -> っが.   

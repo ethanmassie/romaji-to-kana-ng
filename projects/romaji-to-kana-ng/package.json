@@ -1,11 +1,20 @@
 {
   "name": "kana-pipe-ng",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "peerDependencies": {
     "@angular/common": "^10.0.14",
     "@angular/core": "^10.0.14"
   },
   "dependencies": {
     "tslib": "^2.0.0"
-  }
+  },
+  "description": "Angular module providing a pipe for converting romaji to kana",
+  "keywords": ["Angular", "Angular Pipe", "Japanese", "Kana", "Romaji"],
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ethanmassie/romaji-to-kana-ng.git",
+    "directory": "projects/romaji-to-kana-ng"
+  },
+  "homepage": "https://github.com/ethanmassie/romaji-to-kana-ng.git"
 }
