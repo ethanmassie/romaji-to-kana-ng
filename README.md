@@ -23,4 +23,4 @@ Usage with ngModel
 
 # Enduser Usage
 Input your romaji phonetically. Capitals will be converted to katakana whereas lowercase is converted to hiragana.  Mixed case will be ignored.
-'-' hyphens will be converted to katakana long vowels. Example: ka -> か　gyo -> ぎょ　gga -> っが.   
+'-' hyphens will be converted to katakana long vowels. Example: ka -> か　gyo -> ぎょ　gga -> っが. 
