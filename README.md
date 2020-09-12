@@ -2,6 +2,8 @@
 Provides an angular pipe for converting roman characters to kana.
 
 # Developer Usage
+Installation
+`npm install --save romaji-to-kana`
 
 Import the module
 ```typescript
