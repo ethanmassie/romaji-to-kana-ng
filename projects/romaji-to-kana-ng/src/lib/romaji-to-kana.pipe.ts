@@ -60,7 +60,7 @@ export class RomajiToKanaPipe implements PipeTransform {
     let valueArr = value.split('')
     let result = '';
     while (valueArr.length) {
-      acc = acc.concat(valueArr.shift());
+      acc += valueArr.shift();
       
       // if the acc contains a kana character or a special character reset acc and continue
       if (acc.match(specialCharAndKanaRegExp)) {
@@ -102,14 +102,25 @@ export class RomajiToKanaPipe implements PipeTransform {
             }
           }
         }
-          
-        // if we reach this point assume these 3 characters don't match anything and add them to the result then clear the acc
-        result += acc;
-        acc = '';
+
+        // attempt one last match before giving up on these 3
+        const match = kanaMap[acc.slice(1)];
+        // this will occur if we have something like kga
+        result += acc[0];
+        if (!!match) {
+          result += match;
+          acc = '';
+          continue;
+        } else {
+          // remove the first character and allow this set to go through another pass
+          // we might have a 3 character match like gya coming up
+          acc = acc.slice(1);
+          continue;
+        }
       }
     }
     // add any leftovers to the result and return it
-    return result.concat(acc);
+    return result + acc;
   }
 
   makeDoubleConsonant(kana: string) {

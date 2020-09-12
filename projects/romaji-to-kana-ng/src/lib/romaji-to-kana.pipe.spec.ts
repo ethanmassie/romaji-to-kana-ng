@@ -32,6 +32,11 @@ describe('RomajiToKanaPipe', () => {
     expect(value).toEqual('かかあ');
   });
 
+  it('should work with three characters where the last 2 are a match', () => {
+    expect(pipe.transform('kga')).toEqual('kが');
+    expect(pipe.transform('kgya')).toEqual('kぎゃ');
+  })
+
   it('should work with katakana', () => {
     expect(pipe.transform('KATAKANAHAKAKKOII')).toEqual('カタカナハカッコイイ');
   });
